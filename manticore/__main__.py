@@ -112,6 +112,9 @@ def parse_arguments():
     parser.add_argument('--detect-env-instr', action='store_true',
                         help='Enable detection of use of potentially unsafe/manipulable instructions')
 
+    parser.add_argument('--detect-transaction-order', action='store_true',
+                        help='Enable detection of possible transaction order dependencies (Ethereum only)')
+
     parser.add_argument('--detect-all', action='store_true',
                         help='Enable all detector heuristics (Ethereum only)')
 
@@ -137,7 +140,10 @@ def parse_arguments():
 
 
 def ethereum_cli(args):
-    from .ethereum import ManticoreEVM, DetectInvalid, DetectIntegerOverflow, DetectUninitializedStorage, DetectUninitializedMemory, FilterFunctions, DetectReentrancySimple, DetectUnusedRetVal, DetectSelfdestruct, LoopDepthLimiter, DetectDelegatecall, DetectExternalCallAndLeak, DetectReentrancyAdvanced, DetectEnvInstruction
+    from .ethereum import ManticoreEVM, DetectInvalid, DetectIntegerOverflow, DetectUninitializedStorage, \
+        DetectUninitializedMemory, FilterFunctions, DetectReentrancySimple, DetectUnusedRetVal, DetectSelfdestruct, \
+        LoopDepthLimiter, DetectDelegatecall, DetectExternalCallAndLeak, DetectReentrancyAdvanced, \
+        DetectEnvInstruction, DetectTransactionOrderDependence
 
     log.init_logging()
 
@@ -165,6 +171,8 @@ def ethereum_cli(args):
         m.register_detector(DetectExternalCallAndLeak())
     if args.detect_all or args.detect_env_instr:
         m.register_detector(DetectEnvInstruction())
+    if args.detect_all or args.detect_transaction_order:
+        m.register_detector(DetectTransactionOrderDependence())
 
     if args.limit_loops:
         m.register_plugin(LoopDepthLimiter())
