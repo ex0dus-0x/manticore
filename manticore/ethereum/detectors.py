@@ -616,7 +616,7 @@ class DetectTransactionOrderDependence(Detector):
         world = state.platform
         curr_tx = world.current_transaction
 
-        if curr_tx.sort != 'CREATE' and self.is_in_dispatcher(state):
+        if curr_tx.sort == 'CREATE' or self.is_in_dispatcher(state):
             return
 
         key = self.TAINT + str(offset)  # offset is storage index/slot
