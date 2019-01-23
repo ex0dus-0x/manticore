@@ -157,16 +157,13 @@ class Manticore(ManticoreBase):
     # Symbol Resolution
     ###############################
 
-    def resolve(self, symbol):
+    def resolve_addr(self, symbol):
         """
         A helper method used to resolve a symbol name into a memory address when
         injecting hooks for analysis.
 
         :param symbol: function name to be resolved
         :type symbol: string
-
-        :param line: if more functions present, optional line number can be included
-        :type line: int or None
         """
 
         with open(self.binary_path, 'rb') as f:
